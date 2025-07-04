@@ -30,6 +30,9 @@ from .core import (
     tokenize_graphemes,
     clean_text,
     normalize_text,
+    get_script_info,
+    detect_language,
+    is_valid_tamil_text,
 )
 from .exceptions import (
     TamilTokenizerError,
@@ -37,7 +40,7 @@ from .exceptions import (
     TokenizationError,
 )
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 __author__ = "Raja CSP Raman"
 __email__ = "raja.csp@gmail.com"
 
@@ -50,6 +53,9 @@ __all__ = [
     "tokenize_graphemes",
     "clean_text",
     "normalize_text",
+    "get_script_info",
+    "detect_language",
+    "is_valid_tamil_text",
     "TamilTokenizerError",
     "InvalidTextError",
     "TokenizationError",

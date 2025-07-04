@@ -5,6 +5,77 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2025-01-07
+
+### Added
+- **Enhanced Text Normalization**:
+  - Comprehensive Unicode normalization (NFC, NFD, NFKC, NFKD)
+  - Tamil digit standardization (௦-௯ to 0-9)
+  - Punctuation standardization (quotes, dashes, ellipsis)
+  - Zero-width character removal (ZWJ, ZWNJ, etc.)
+  - Configurable normalization options
+- **Script Information Analysis**:
+  - `get_script_info()` - Comprehensive script analysis and metrics
+  - `detect_language()` - Language detection with confidence scores
+  - `is_valid_tamil_text()` - Tamil text validation with thresholds
+  - Script detection and character distribution analysis
+  - Complexity scoring and readability assessment
+  - Unicode block identification
+- **Character Type Analysis**:
+  - Detailed character type categorization (vowels, consonants, etc.)
+  - Tamil numeral detection and mixed numeral analysis
+  - Conjunct consonant and vowel sign analysis
+  - Character distribution statistics
+- **Language Detection Features**:
+  - Primary language identification
+  - Mixed-language content detection
+  - Confidence scoring for language predictions
+  - Script distribution analysis
+
+### Enhanced
+- **TamilTokenizer Class**:
+  - Enhanced `normalize_text()` with comprehensive options
+  - Added `get_script_info()` for detailed script analysis
+  - Added `detect_language()` for language identification
+  - Added `is_valid_tamil_text()` for content validation
+  - New private methods for digit/punctuation standardization
+- **Convenience Functions**:
+  - Enhanced `normalize_text()` with full parameter support
+  - Added `get_script_info()` convenience function
+  - Added `detect_language()` convenience function
+  - Added `is_valid_tamil_text()` convenience function
+- **Text Processing**:
+  - Advanced Unicode normalization capabilities
+  - Better handling of Tamil script complexities
+  - Improved text quality through standardization
+  - Enhanced error handling and validation
+
+### Technical Improvements
+- **Unicode Processing**:
+  - Full Unicode normalization form support
+  - Zero-width character handling
+  - Tamil-specific character standardization
+- **Analysis Algorithms**:
+  - Complexity scoring based on linguistic features
+  - Readability assessment with multiple levels
+  - Script detection using Unicode properties
+  - Character type classification system
+- **Code Quality**:
+  - Comprehensive test suite for new features
+  - Enhanced type annotations
+  - Improved error handling and validation
+  - Detailed documentation and examples
+
+### Documentation
+- **New Examples**:
+  - `examples/advanced_features_demo.py` - Comprehensive feature demonstration
+  - Enhanced README with new feature documentation
+  - Updated API reference with new methods
+- **Testing**:
+  - `tests/test_new_features.py` - Complete test coverage for new features
+  - Enhanced test scenarios for edge cases
+  - Validation tests for all new functionality
+
 ## [0.1.1] - 2025-01-07
 
 ### Added

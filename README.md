@@ -8,9 +8,12 @@ A simple and efficient Tamil text tokenizer library with modern Python structure
 ## Features
 
 - **Tamil Text Tokenization**: Comprehensive tokenization for Tamil text
-- **Multiple Tokenization Methods**: Word, sentence, and character-level tokenization
-- **Text Cleaning**: Remove extra whitespace and punctuation
-- **Text Normalization**: Standardize Tamil text format
+- **Multiple Tokenization Methods**: Word, sentence, character, syllable, and grapheme-level tokenization
+- **Enhanced Text Normalization**: Unicode normalization, digit standardization, punctuation standardization
+- **Script Information Analysis**: Comprehensive script detection, complexity scoring, and readability assessment
+- **Language Detection**: Automatic Tamil language detection with confidence scores
+- **Text Validation**: Tamil text validation with configurable thresholds
+- **Character Type Analysis**: Detailed analysis of vowels, consonants, conjuncts, and other character types
 - **Modern Python API**: Clean, type-hinted interface with both functional and object-oriented approaches
 - **Command Line Interface**: Full-featured CLI tool for Tamil text processing
 - **Fast Processing**: Efficient regex-based operations
@@ -121,6 +124,107 @@ print(f"No punctuation: '{cleaned_no_punct}'")
 normalized = normalize_text(messy_text)
 print(f"Normalized: '{normalized}'")
 # Output: 'தமிழ் மொழி அழகு'
+```
+
+### Enhanced Text Normalization
+
+```python
+from tamil_tokenizer import normalize_text, TamilTokenizer
+
+tokenizer = TamilTokenizer()
+
+# Comprehensive normalization with all options
+text = "  தமிழ்—௧௨௩\u200Cமொழி…அழகான—மொழி  "
+normalized = tokenizer.normalize_text(
+    text,
+    form="NFC",                    # Unicode normalization
+    standardize_digits=True,       # Tamil digits to Arabic
+    standardize_punctuation=True,  # Standardize punctuation
+    remove_zero_width=True         # Remove invisible characters
+)
+print(f"Normalized: '{normalized}'")
+# Output: 'தமிழ்-123மொழி...அழகான-மொழி'
+
+# Tamil digit standardization
+text_with_digits = "தமிழ் ௧௨௩௪ வருடங்கள் பழமையான மொழி"
+standardized = normalize_text(text_with_digits, standardize_digits=True)
+print(f"Standardized: {standardized}")
+# Output: 'தமிழ் 1234 வருடங்கள் பழமையான மொழி'
+```
+
+### Script Information Analysis
+
+```python
+from tamil_tokenizer import get_script_info, TamilTokenizer
+
+tokenizer = TamilTokenizer()
+
+# Comprehensive script analysis
+text = "தமிழ் மொழி உலகின் பழமையான மொழிகளில் ஒன்று"
+info = tokenizer.get_script_info(text)
+
+print(f"Tamil percentage: {info['tamil_percentage']:.1f}%")
+print(f"Complexity score: {info['complexity_score']:.2f}")
+print(f"Readability level: {info['readability_level']}")
+print(f"Scripts detected: {info['scripts_detected']}")
+print(f"Has conjuncts: {info['has_conjuncts']}")
+print(f"Unicode blocks: {info['unicode_blocks']}")
+
+# Character type analysis
+char_types = info['character_types']
+print(f"Vowels: {char_types['vowels']}")
+print(f"Consonants: {char_types['consonants']}")
+print(f"Vowel signs: {char_types['vowel_signs']}")
+```
+
+### Language Detection
+
+```python
+from tamil_tokenizer import detect_language, TamilTokenizer
+
+tokenizer = TamilTokenizer()
+
+# Detect language with confidence
+texts = [
+    "தமிழ் மொழி அழகான மொழி",
+    "தமிழ் Tamil மொழி Language",
+    "Hello World English Text"
+]
+
+for text in texts:
+    result = tokenizer.detect_language(text)
+    print(f"Text: {text}")
+    print(f"Language: {result['primary_language']}")
+    print(f"Confidence: {result['confidence']:.2f}")
+    print(f"Is Tamil: {result['is_tamil']}")
+    print("---")
+```
+
+### Text Validation
+
+```python
+from tamil_tokenizer import is_valid_tamil_text, TamilTokenizer
+
+tokenizer = TamilTokenizer()
+
+# Validate Tamil text with different thresholds
+texts = [
+    "தமிழ் மொழி அழகான மொழி",
+    "தமிழ் Tamil மொழி",
+    "Hello World"
+]
+
+for text in texts:
+    # Default threshold (50%)
+    is_valid_default = tokenizer.is_valid_tamil_text(text)
+    
+    # Strict threshold (80%)
+    is_valid_strict = tokenizer.is_valid_tamil_text(text, min_tamil_percentage=80.0)
+    
+    print(f"Text: {text}")
+    print(f"Valid (50%): {is_valid_default}")
+    print(f"Valid (80%): {is_valid_strict}")
+    print("---")
 ```
 
 ### Text Statistics
@@ -345,6 +449,22 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
 
 ## Changelog
+
+### v0.2.0 (2025-01-07)
+- **Enhanced Text Normalization**
+- Comprehensive Unicode normalization (NFC, NFD, NFKC, NFKD)
+- Tamil digit standardization (௦-௯ to 0-9)
+- Punctuation standardization and zero-width character removal
+- **Script Information Analysis**
+- Added `get_script_info()` for comprehensive script analysis
+- Added `detect_language()` for language detection with confidence scores
+- Added `is_valid_tamil_text()` for Tamil text validation
+- Character type analysis and complexity scoring
+- **Advanced Features**
+- Language detection with confidence scoring
+- Text validation with configurable thresholds
+- Unicode block identification and readability assessment
+- Enhanced convenience functions with full parameter support
 
 ### v0.1.1 (2025-01-07)
 - **Enhanced Tamil Tokenization**
