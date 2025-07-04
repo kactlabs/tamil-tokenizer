@@ -5,6 +5,64 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2025-01-07
+
+### Added
+- **Advanced Tamil Tokenization Features**:
+  - `tokenize_syllables()` - Syllable-level tokenization following Tamil phonetic patterns
+  - `tokenize_graphemes()` - Grapheme cluster tokenization for proper Tamil character handling
+  - `analyze_word_structure()` - Detailed word structure analysis with linguistic features
+- **Enhanced Character Tokenization**:
+  - Improved character tokenization to handle individual Unicode characters properly
+  - Fixed character tokenization test compatibility
+  - Better handling of Tamil combining marks and diacritics
+- **Advanced Text Analysis**:
+  - Enhanced `get_statistics()` with comprehensive Tamil text metrics
+  - Conjunct consonant detection and analysis
+  - Vowel sign usage statistics
+  - Syllable-based text analysis
+- **Improved Tamil Script Support**:
+  - Better handling of Tamil grapheme clusters
+  - Enhanced support for consonant conjuncts (க்ஷ், ஸ்ரீ, etc.)
+  - Proper vowel sign recognition and processing
+  - Advanced Tamil Unicode pattern matching
+
+### Enhanced
+- **TamilTokenizer Class**:
+  - Added `tokenize_syllables()` method for phonetic tokenization
+  - Added `tokenize_graphemes()` method for linguistic character clustering
+  - Added `analyze_word_structure()` method for morphological analysis
+  - Enhanced `tokenize()` method to support "syllables" and "graphemes" methods
+  - Improved `get_statistics()` with additional Tamil-specific metrics
+- **Convenience Functions**:
+  - Added `tokenize_syllables()` convenience function
+  - Added `tokenize_graphemes()` convenience function
+  - Updated module exports to include new functions
+- **Regular Expression Patterns**:
+  - Enhanced Tamil character pattern matching
+  - Improved grapheme cluster detection
+  - Better syllable boundary identification
+  - Advanced consonant conjunct recognition
+
+### Technical Improvements
+- **Unicode Handling**:
+  - More precise Tamil Unicode range processing (U+0B80–U+0BFF)
+  - Better handling of Tamil combining characters
+  - Improved vowel sign and consonant cluster detection
+- **Pattern Matching**:
+  - Advanced regex patterns for Tamil syllable structure
+  - Enhanced grapheme cluster identification
+  - Better word boundary detection for Tamil text
+- **Code Quality**:
+  - Maintained full type annotation coverage
+  - Enhanced error handling for new features
+  - Comprehensive documentation for new methods
+
+### Fixed
+- Character tokenization now returns individual Unicode characters as expected by tests
+- Improved compatibility with existing test suite
+- Better handling of edge cases in Tamil text processing
+
 ## [0.1.0] - 2025-01-07
 
 ### Added

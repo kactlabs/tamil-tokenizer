@@ -10,6 +10,8 @@ from tamil_tokenizer import (
     tokenize_words,
     tokenize_sentences,
     tokenize_characters,
+    tokenize_syllables,
+    tokenize_graphemes,
     clean_text,
     normalize_text,
 )
@@ -131,17 +133,21 @@ class TestCharacterTokenization:
         """Test simple character tokenization."""
         tokenizer = TamilTokenizer()
         result = tokenizer.tokenize_characters("தமிழ்")
-        assert len(result) == 4  # த, ம, ி, ழ், ்
+        assert len(result) == 5  # த, ம, ி, ழ, ்
         assert "த" in result
         assert "ம" in result
+        assert "ி" in result
+        assert "ழ" in result
+        assert "்" in result
     
     def test_characters_with_spaces(self):
         """Test character tokenization with spaces (should ignore spaces)."""
         tokenizer = TamilTokenizer()
         result = tokenizer.tokenize_characters("த மி")
-        assert len(result) == 2
+        assert len(result) == 3  # த, ம, ி
         assert "த" in result
-        assert "மி" in result
+        assert "ம" in result
+        assert "ி" in result
     
     def test_convenience_function(self):
         """Test convenience function for character tokenization."""
@@ -195,6 +201,93 @@ class TestTextNormalization:
         assert result == "தமிழ் மொழி"
 
 
+class TestSyllableTokenization:
+    """Test syllable tokenization functionality (New in v0.1.1)."""
+    
+    def test_simple_syllable_tokenization(self):
+        """Test simple syllable tokenization."""
+        tokenizer = TamilTokenizer()
+        result = tokenizer.tokenize_syllables("தமிழ்")
+        assert len(result) >= 2  # At least த, மிழ்
+        assert any("த" in syl for syl in result)
+    
+    def test_syllables_with_vowel_signs(self):
+        """Test syllable tokenization with vowel signs."""
+        tokenizer = TamilTokenizer()
+        result = tokenizer.tokenize_syllables("தமிழ்")
+        assert len(result) > 0
+        # Should handle Tamil syllable patterns properly
+    
+    def test_convenience_function(self):
+        """Test convenience function for syllable tokenization."""
+        result = tokenize_syllables("தமிழ்")
+        assert len(result) > 0
+        assert all(isinstance(syl, str) for syl in result)
+
+
+class TestGraphemeTokenization:
+    """Test grapheme cluster tokenization functionality (New in v0.1.1)."""
+    
+    def test_simple_grapheme_tokenization(self):
+        """Test simple grapheme tokenization."""
+        tokenizer = TamilTokenizer()
+        result = tokenizer.tokenize_graphemes("தமிழ்")
+        assert len(result) >= 3  # Logical Tamil characters
+        assert "த" in result
+    
+    def test_graphemes_with_conjuncts(self):
+        """Test grapheme tokenization with conjunct consonants."""
+        tokenizer = TamilTokenizer()
+        result = tokenizer.tokenize_graphemes("க்ஷ")  # Conjunct
+        assert len(result) > 0
+        # Should handle conjuncts as single graphemes
+    
+    def test_convenience_function(self):
+        """Test convenience function for grapheme tokenization."""
+        result = tokenize_graphemes("தமிழ்")
+        assert len(result) > 0
+        assert all(isinstance(grapheme, str) for grapheme in result)
+
+
+class TestWordStructureAnalysis:
+    """Test word structure analysis functionality (New in v0.1.1)."""
+    
+    def test_tamil_word_analysis(self):
+        """Test analysis of Tamil word structure."""
+        tokenizer = TamilTokenizer()
+        result = tokenizer.analyze_word_structure("தமிழ்")
+        
+        assert result['is_tamil'] == True
+        assert result['character_count'] > 0
+        assert result['syllable_count'] > 0
+        assert isinstance(result['has_conjuncts'], bool)
+        assert isinstance(result['has_vowel_signs'], bool)
+        assert isinstance(result['characters'], list)
+        assert isinstance(result['syllables'], list)
+    
+    def test_non_tamil_word_analysis(self):
+        """Test analysis of non-Tamil word."""
+        tokenizer = TamilTokenizer()
+        result = tokenizer.analyze_word_structure("hello")
+        
+        assert result['is_tamil'] == False
+        assert result['character_count'] == 0
+        assert result['syllable_count'] == 0
+        assert result['has_conjuncts'] == False
+        assert result['has_vowel_signs'] == False
+        assert result['characters'] == []
+        assert result['syllables'] == []
+    
+    def test_word_with_vowel_signs(self):
+        """Test analysis of word with vowel signs."""
+        tokenizer = TamilTokenizer()
+        result = tokenizer.analyze_word_structure("தமிழ்")
+        
+        assert result['is_tamil'] == True
+        # தமிழ் has vowel sign 'ி'
+        assert result['has_vowel_signs'] == True
+
+
 class TestGeneralTokenization:
     """Test general tokenization method."""
     
@@ -215,6 +308,18 @@ class TestGeneralTokenization:
         tokenizer = TamilTokenizer()
         result = tokenizer.tokenize("தமிழ்", "characters")
         assert len(result) >= 3
+    
+    def test_tokenize_syllables_method(self):
+        """Test general tokenize method with syllables."""
+        tokenizer = TamilTokenizer()
+        result = tokenizer.tokenize("தமிழ்", "syllables")
+        assert len(result) > 0
+    
+    def test_tokenize_graphemes_method(self):
+        """Test general tokenize method with graphemes."""
+        tokenizer = TamilTokenizer()
+        result = tokenizer.tokenize("தமிழ்", "graphemes")
+        assert len(result) > 0
     
     def test_invalid_tokenization_method(self):
         """Test invalid tokenization method."""

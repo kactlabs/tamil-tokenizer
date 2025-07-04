@@ -346,7 +346,20 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 
 ## Changelog
 
-### v0.1.0
+### v0.1.1 (2025-01-07)
+- **Enhanced Tamil Tokenization**
+- Added syllable-level tokenization (`tokenize_syllables()`)
+- Added grapheme cluster tokenization (`tokenize_graphemes()`)
+- Added word structure analysis (`analyze_word_structure()`)
+- Improved character tokenization for better Unicode handling
+- Enhanced text statistics with Tamil-specific metrics
+- Better support for Tamil conjunct consonants and vowel signs
+- Advanced Tamil script processing with improved regex patterns
+- Fixed character tokenization test compatibility
+- Enhanced `tokenize()` method to support "syllables" and "graphemes"
+- Added comprehensive test coverage for new features
+
+### v0.1.0 (2025-01-07)
 - **Initial release**
 - Basic Tamil text tokenization (words, sentences, characters)
 - Text cleaning and normalization

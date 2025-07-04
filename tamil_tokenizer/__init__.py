@@ -26,6 +26,8 @@ from .core import (
     tokenize_words,
     tokenize_sentences,
     tokenize_characters,
+    tokenize_syllables,
+    tokenize_graphemes,
     clean_text,
     normalize_text,
 )
@@ -35,7 +37,7 @@ from .exceptions import (
     TokenizationError,
 )
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __author__ = "Raja CSP Raman"
 __email__ = "raja.csp@gmail.com"
 
@@ -44,6 +46,8 @@ __all__ = [
     "tokenize_words",
     "tokenize_sentences", 
     "tokenize_characters",
+    "tokenize_syllables",
+    "tokenize_graphemes",
     "clean_text",
     "normalize_text",
     "TamilTokenizerError",
