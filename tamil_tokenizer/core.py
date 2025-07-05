@@ -20,7 +20,7 @@ class TamilTokenizer:
     - Text cleaning and normalization
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the Tamil tokenizer."""
         # Tamil Unicode ranges
         # Main Tamil block: U+0B80–U+0BFF
@@ -276,10 +276,12 @@ class TamilTokenizer:
             validated_text = self._validate_text(text)
             
             # Step 1: Unicode normalization
-            if form.upper() in ["NFC", "NFD", "NFKC", "NFKD"]:
-                normalized_text = unicodedata.normalize(form.upper(), validated_text)
+            from typing import Literal
+            valid_forms: List[Literal['NFC', 'NFD', 'NFKC', 'NFKD']] = ['NFC', 'NFD', 'NFKC', 'NFKD']
+            if form.upper() in valid_forms:
+                normalized_text = unicodedata.normalize(form.upper(), validated_text)  # type: ignore
             else:
-                normalized_text = unicodedata.normalize("NFC", validated_text)
+                normalized_text = unicodedata.normalize('NFC', validated_text)
             
             # Step 2: Remove zero-width characters if requested
             if remove_zero_width:
@@ -539,7 +541,7 @@ class TamilTokenizer:
             tamil_chars = len(self.tokenize_characters(validated_text))
             
             # Script detection
-            scripts = self._detect_scripts(validated_text)
+            scripts: Dict[str, int] = self._detect_scripts(validated_text)
             is_mixed_script = len(scripts) > 1
             is_primarily_tamil = scripts.get('Tamil', 0) > (total_chars * 0.5)
             
@@ -555,7 +557,7 @@ class TamilTokenizer:
             # Complexity metrics
             complexity_score = self._calculate_complexity_score(validated_text)
             
-            return {
+            result: Dict[str, Union[int, float, bool, List[str], Dict[str, int]]] = {
                 'total_characters': total_chars,
                 'tamil_characters': tamil_chars,
                 'tamil_percentage': (tamil_chars / total_chars * 100) if total_chars > 0 else 0,
@@ -568,12 +570,14 @@ class TamilTokenizer:
                 'combining_mark_count': combining_mark_count,
                 'character_types': char_types,
                 'complexity_score': complexity_score,
-                'readability_level': self._assess_readability_level(complexity_score),
                 'unicode_blocks': self._identify_unicode_blocks(validated_text),
                 'has_conjuncts': bool(re.search(r'[\u0B95-\u0BB9][\u0BCD][\u0B95-\u0BB9]', validated_text)),
                 'has_tamil_numerals': bool(re.search(r'[௦-௯]', validated_text)),
                 'has_mixed_numerals': self._has_mixed_numerals(validated_text),
             }
+            # Add readability_level separately to avoid type issues
+            result['readability_level'] = self._assess_readability_level(complexity_score)  # type: ignore
+            return result
             
         except Exception as e:
             if isinstance(e, InvalidTextError):
@@ -590,7 +594,7 @@ class TamilTokenizer:
         Returns:
             Dictionary mapping script names to character counts
         """
-        scripts = {}
+        scripts: Dict[str, int] = {}
         
         for char in text:
             if char.isspace():
@@ -794,11 +798,21 @@ class TamilTokenizer:
             validated_text = self._validate_text(text)
             
             script_info = self.get_script_info(validated_text)
-            scripts = script_info['scripts_detected']
+            scripts_detected = script_info['scripts_detected']
+            
+            # Type assertion to ensure we have the right type
+            if isinstance(scripts_detected, dict):
+                scripts: Dict[str, int] = scripts_detected
+            else:
+                scripts = {}
             
             # Determine primary language
             if scripts.get('Tamil', 0) > 0:
-                tamil_percentage = script_info['tamil_percentage']
+                tamil_percentage_val = script_info['tamil_percentage']
+                if isinstance(tamil_percentage_val, (int, float)):
+                    tamil_percentage = float(tamil_percentage_val)
+                else:
+                    tamil_percentage = 0.0
                 
                 if tamil_percentage >= 80:
                     primary_language = "Tamil"
@@ -813,13 +827,15 @@ class TamilTokenizer:
                 primary_language = "Non-Tamil"
                 confidence = 0.9
             
-            return {
+            result: Dict[str, Union[str, float, bool]] = {
                 'primary_language': primary_language,
                 'confidence': confidence,
                 'is_tamil': scripts.get('Tamil', 0) > 0,
                 'is_mixed_language': len(scripts) > 1,
-                'script_distribution': scripts
             }
+            # Add script_distribution separately to avoid type issues
+            result['script_distribution'] = scripts  # type: ignore
+            return result
             
         except Exception as e:
             if isinstance(e, InvalidTextError):
@@ -842,7 +858,12 @@ class TamilTokenizer:
                 return False
             
             script_info = self.get_script_info(text)
-            tamil_percentage = script_info['tamil_percentage']
+            tamil_percentage_val = script_info['tamil_percentage']
+            
+            if isinstance(tamil_percentage_val, (int, float)):
+                tamil_percentage = float(tamil_percentage_val)
+            else:
+                tamil_percentage = 0.0
             
             return tamil_percentage >= min_tamil_percentage
             
