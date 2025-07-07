@@ -5,6 +5,7 @@ Core functionality for Tamil text tokenization and processing.
 import re
 import unicodedata
 from typing import List, Optional, Union, Dict, Tuple
+import regex
 
 from .exceptions import InvalidTextError, TokenizationError
 
@@ -170,20 +171,21 @@ class TamilTokenizer:
         """
         try:
             validated_text = self._validate_text(text)
-            
-            # Extract individual Tamil characters
-            characters = []
-            for char in validated_text:
-                if self.tamil_pattern.match(char):
-                    characters.append(char)
-            
+
+            # Use Unicode-aware regex to extract grapheme clusters
+            characters = regex.findall(r'\X', validated_text)
+
+            # Optionally filter out whitespace
+            characters = [char for char in characters if not char.isspace()]
+
             return characters
-            
+
         except Exception as e:
             if isinstance(e, (InvalidTextError, TokenizationError)):
                 raise
             raise TokenizationError(f"Failed to tokenize characters: {str(e)}")
-    
+
+        
     def tokenize_graphemes(self, text: str) -> List[str]:
         """
         Tokenize Tamil text into grapheme clusters (logical characters).
