@@ -44,7 +44,7 @@ class TamilTokenizer:
         
         # Enhanced word pattern that handles Tamil script properly
         # This matches sequences of Tamil characters including combining marks
-        self.word_pattern = re.compile(r'[\u0B80-\u0BFF]+(?:[\u0BCD\u0BD7][\u0B80-\u0BFF]*)*')
+        self.word_pattern = re.compile(r'[\u0B80-\u0BFF]+|\d+|[.,!?]+(?:[\u0BCD\u0BD7][\u0B80-\u0BFF]*)*')
         
         # Whitespace and punctuation patterns
         self.whitespace_pattern = re.compile(r'\s+')
